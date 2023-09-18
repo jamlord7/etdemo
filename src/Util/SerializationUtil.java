@@ -6,7 +6,7 @@ import soot.jimple.infoflow.results.InfoflowResults;
 import java.io.*;
 
 public class SerializationUtil {
-    public static void WriteInfoFlowResultsToFile(InfoflowResults infoflowResults, String filePath) {
+    public static void WriteInfoFlowResultsToFile(Long actualTimeCost, InfoflowResults infoflowResults, String filePath) {
         File resultsOutputFile = new File(filePath);
         try {
             // if file does not exist, then create it.
@@ -16,7 +16,7 @@ public class SerializationUtil {
             Writer resultsWriter = new BufferedWriter(new FileWriter(resultsOutputFile.getAbsolutePath()));
             var performanceData = infoflowResults.getPerformanceData();
 
-            resultsWriter.write(String.format("Vj-result: Overall time in seconds: %s", performanceData.getTotalRuntimeSeconds()));
+            resultsWriter.write(String.format("Vj-result: Overall time in seconds: %s", actualTimeCost));
             resultsWriter.write("\n --------------FlowDroid detail---------------");
             resultsWriter.write(String.format("\n FlowDroid-result: FlowDroid Runtime in seconds: %s", performanceData.getTotalRuntimeSeconds()));
             resultsWriter.write(String.format("\n FlowDroid-result: Call graph build in seconds: %s", performanceData.getCallgraphConstructionSeconds()));

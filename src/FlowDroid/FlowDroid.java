@@ -45,12 +45,16 @@ public class FlowDroid {
             application.setTaintWrapper(new EasyTaintWrapper(Config.taintWrapperPath));
             application.getConfig().setInspectSinks(true);
             application.getConfig().setInspectSources(true);
-            application.getConfig().setFlowSensitiveAliasing(false);
+            application.getConfig().setFlowSensitiveAliasing(true);
             application.getConfig().setMergeDexFiles(true);
-            application.getConfig().getAccessPathConfiguration().setAccessPathLength(1);
-            application.getConfig().setAliasingAlgorithm(InfoflowConfiguration.AliasingAlgorithm.None);
+            application.getConfig().setEnableExceptionTracking(true);
+            application.getConfig().getAccessPathConfiguration().setAccessPathLength(5);
+            application.getConfig().setAliasingAlgorithm(InfoflowConfiguration.AliasingAlgorithm.FlowSensitive);
             application.getConfig().getPathConfiguration().setPathReconstructionMode(InfoflowConfiguration.PathReconstructionMode.Precise);
             application.getConfig().setCodeEliminationMode(InfoflowConfiguration.CodeEliminationMode.NoCodeElimination);
+            application.getConfig().setPathAgnosticResults(false);
+            application.getConfig().setStaticFieldTrackingMode(InfoflowConfiguration.StaticFieldTrackingMode.ContextFlowSensitive);
+            application.getConfig().setDataFlowTimeout(9000);
         }
     }
 
@@ -65,7 +69,7 @@ public class FlowDroid {
     }
 
     public InfoflowResults runTaintAnalysis(String sourcesAndSinksFilePath) throws XmlPullParserException, IOException {
-        //setFlowDroidConfig();
+        setFlowDroidConfig();
         application.getConfig().setTaintAnalysisEnabled(true);
         application.getConfig().setSootIntegrationMode(InfoflowConfiguration.SootIntegrationMode.UseExistingCallgraph);
         return application.runInfoflow(sourcesAndSinksFilePath);
