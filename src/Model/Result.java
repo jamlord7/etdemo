@@ -7,6 +7,7 @@ public class Result {
     private long incrementalTaintAnalysisResult;
     private InfoflowResults infoflowResults;
     private long getFunctionListCost;
+    private long buildCallGraphCost;
     private long findChangedMethodsCost;
     private long impactAnalysisCost;
     private long findSourcesAndSinksCost;
@@ -14,6 +15,14 @@ public class Result {
     private Pair<Integer, Integer> addedMethodsCnt;
     private Pair<Integer, Integer> modifiedMethodsCnt;
     private Pair<Integer, Integer> deletedMethodsCnt;
+
+    public long getBuildCallGraphCost() {
+        return buildCallGraphCost;
+    }
+
+    public void setBuildCallGraphCost(long buildCallGraphCost) {
+        this.buildCallGraphCost = buildCallGraphCost;
+    }
 
     public Pair<Integer, Integer> getAddedMethodsCnt() {
         return addedMethodsCnt;

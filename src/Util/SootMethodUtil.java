@@ -120,15 +120,24 @@ public class SootMethodUtil {
         if (unitsInS1.size() != unitsInS2.size()) {
             return false;
         }
-        var itS1 = unitsInS1.iterator();
-        var itS2 = unitsInS2.iterator();
-        while (itS1.hasNext() && itS2.hasNext()) {
-            var unitS1 = itS1.next();
-            var unitS2 = itS2.next();
-            if (!unitS1.toString().equals(unitS2.toString())) {
-                return false;
-            }
+        if (b1.getLocalCount() != b2.getLocalCount()) {
+            return false;
         }
+        if (b1.getTraps().size() != b2.getTraps().size()) {
+            return false;
+        }
+//        var itS1 = unitsInS1.iterator();
+//        var itS2 = unitsInS2.iterator();
+//        while (itS1.hasNext() && itS2.hasNext()) {
+//            var unitS1 = itS1.next();
+//            var unitS2 = itS2.next();
+//            Stmt stmt1 = (Stmt) unitS1;
+//            Stmt stmt2 = (Stmt) unitS2;
+//            // fixme: not working for the register's name are different
+//            if (!unitS1.toString().equals(unitS2.toString())) {
+//                return false;
+//            }
+//        }
         return true;
     }
 
@@ -152,5 +161,53 @@ public class SootMethodUtil {
         }
 
         return MethodSignaturesCalledInAMethod;
+    }
+
+    public static Set<String> returnMethodSignaturesCalledInAMethodSig(Iterator<String> callgraphSourceMethods) {
+        var MethodSignaturesCalledInAMethod = new HashSet<String>();
+
+        while (callgraphSourceMethods.hasNext()) {
+            var nextMethodSig = callgraphSourceMethods.next();
+            SootMethod nextMethod = Scene.v().getMethod(nextMethodSig);
+
+            if (nextMethod.method().isConcrete()) {
+                Body body = nextMethod.method().getActiveBody();
+                for (Unit unit : body.getUnits()) {
+                    Stmt stmt = (Stmt) unit;
+                    if (stmt.containsInvokeExpr()) {
+                        InvokeExpr invokeExpr = stmt.getInvokeExpr();
+                        MethodSignaturesCalledInAMethod.add(invokeExpr.getMethod().getSignature());
+                    }
+                }
+            }
+        }
+
+        return MethodSignaturesCalledInAMethod;
+    }
+
+    public static boolean twoMethodsEqual0(SootMethod s1, SootMethod s2) {
+        var b1 = s1.retrieveActiveBody();
+        var b2 = s2.retrieveActiveBody();
+        var unitsInS1 = b1.getUnits();
+        var unitsInS2 = b2.getUnits();
+        if (unitsInS1.size() != unitsInS2.size()) {
+            return false;
+        }
+        if (b1.getLocalCount() != b2.getLocalCount()) {
+            return false;
+        }
+        if (b1.getTraps().size() != b2.getTraps().size()) {
+            return false;
+        }
+        var itS1 = unitsInS1.iterator();
+        var itS2 = unitsInS2.iterator();
+        while (itS1.hasNext() && itS2.hasNext()) {
+            var unitS1 = itS1.next();
+            var unitS2 = itS2.next();
+            if (!unitS1.toString().equals(unitS2.toString())) {
+                return false;
+            }
+        }
+        return true;
     }
 }

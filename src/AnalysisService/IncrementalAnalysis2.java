@@ -20,7 +20,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class IncrementalAnalysis {
+public class IncrementalAnalysis2 {
     public static void perform(String viApkName, String vjApkName) throws IOException {
         try {
             String resultDirectoryPath = "./out/" + Config.appName + "/";
@@ -28,10 +28,11 @@ public class IncrementalAnalysis {
             LocalDateTime getFunctionListStart = LocalDateTime.now();
 
             Set<SootMethod> methodsInVi = new HashSet<>();
+            Set<SootMethod> methodsInVj = new HashSet<>();
             Set<String> methodsInViSig = new HashSet<>();
             Set<String> methodsInVjSig = new HashSet<>();
             SootMethodUtil.getFunctionLists(methodsInViSig, methodsInVi, viApkName);
-            SootMethodUtil.getFunctionLists(methodsInVjSig, null, vjApkName);
+            SootMethodUtil.getFunctionLists(methodsInVjSig, methodsInVj, vjApkName);
 
             LocalDateTime getFunctionListEnd = LocalDateTime.now();
 
@@ -44,11 +45,13 @@ public class IncrementalAnalysis {
             // 2. find changed methods
             LocalDateTime findChangedMethodsStart = LocalDateTime.now();
 
-            Map<String, Set<String>> changedMethods = ImpactAnalysis.findChangedMethodsSignature(methodsInViSig, methodsInVjSig, methodsInVi);
+            Map<String, Set<String>> changedMethods = ImpactAnalysis.findChangedMethods2(methodsInVi, methodsInVj);
             Set<String> addedMethods = changedMethods.get("A");
             Set<String> modifiedMethods = changedMethods.get("M");
             Set<String> deletedMethods = changedMethods.get("D");
-            //methodsInVi = null;
+            methodsInVi = null;
+            methodsInVj = null;
+
 
             LocalDateTime findChangedMethodsEnd = LocalDateTime.now();
 
@@ -101,7 +104,7 @@ public class IncrementalAnalysis {
             result.setDeletedMethodsCnt(new Pair<>(deletedMethods.size(), methodsInViSig.size()));
 
 
-            SerializationUtil.WriteInfoFlowResultsToFile(result, resultDirectoryPath + Config.appName + "-evotaint-result.txt");
+            SerializationUtil.WriteInfoFlowResultsToFile(result, resultDirectoryPath + Config.appName + "new-evotaint-result.txt");
             System.out.println("Evotaint done on" + Config.appName);
         } catch (Exception e) {
             e.printStackTrace();
@@ -110,3 +113,4 @@ public class IncrementalAnalysis {
 
     }
 }
+

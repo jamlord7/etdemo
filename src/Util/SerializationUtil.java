@@ -55,13 +55,14 @@ public class SerializationUtil {
             resultsWriter.write(String.format("\n Evotaint-result: Modified methods: %s", modifiedMethodsStat));
             resultsWriter.write(String.format("\n Evotaint-result: Deleted methods: %s", deletedMethodsStat));
             resultsWriter.write(String.format("\n Evotaint-result: Get function list in seconds: %s", result.getGetFunctionListCost()));
+            resultsWriter.write(String.format("\n Evotaint-result: Call graph build in seconds: %s", result.getBuildCallGraphCost()));
             resultsWriter.write(String.format("\n Evotaint-result: Find changed methods in seconds: %s", result.getFindChangedMethodsCost()));
             resultsWriter.write(String.format("\n Evotaint-result: Find impact methods in seconds: %s", result.getImpactAnalysisCost()));
             resultsWriter.write(String.format("\n Evotaint-result: Find sources and sinks in seconds: %s", result.getFindSourcesAndSinksCost()));
             resultsWriter.write(String.format("\n Evotaint-result: FlowDroid run infoflow in seconds: %s", result.getTaintAnalysisCost()));
             resultsWriter.write("\n --------------FlowDroid detail---------------");
             resultsWriter.write(String.format("\n FlowDroid-result: FlowDroid Runtime in seconds: %s", performanceData.getTotalRuntimeSeconds()));
-            resultsWriter.write(String.format("\n FlowDroid-result: Call graph build in seconds: %s", performanceData.getCallgraphConstructionSeconds()));
+            resultsWriter.write(String.format("\n FlowDroid-result: Call graph build in seconds: %s", result.getBuildCallGraphCost()));
             resultsWriter.write(String.format("\n FlowDroid-result: Path reconstruction in seconds: %s", performanceData.getPathReconstructionSeconds()));
             resultsWriter.write(String.format("\n FlowDroid-result: Taint propagation in seconds: %s", performanceData.getTaintPropagationSeconds()));
             resultsWriter.write(String.format("\n FlowDroid-result: Memory consumption: %s MB", performanceData.getMaxMemoryConsumption()));
