@@ -11,6 +11,7 @@ import java.util.*;
 public class SootMethodUtil {
     private static void setupSoot(String apkName) {
         G.reset();
+        Options.v().set_whole_program(true);
         Options.v().set_allow_phantom_refs(true);
         Options.v().set_src_prec(Options.src_prec_apk);
         Options.v().set_force_android_jar(Config.androidJarPath);
@@ -126,18 +127,7 @@ public class SootMethodUtil {
         if (b1.getTraps().size() != b2.getTraps().size()) {
             return false;
         }
-//        var itS1 = unitsInS1.iterator();
-//        var itS2 = unitsInS2.iterator();
-//        while (itS1.hasNext() && itS2.hasNext()) {
-//            var unitS1 = itS1.next();
-//            var unitS2 = itS2.next();
-//            Stmt stmt1 = (Stmt) unitS1;
-//            Stmt stmt2 = (Stmt) unitS2;
-//            // fixme: not working for the register's name are different
-//            if (!unitS1.toString().equals(unitS2.toString())) {
-//                return false;
-//            }
-//        }
+
         return true;
     }
 
@@ -171,7 +161,7 @@ public class SootMethodUtil {
             SootMethod nextMethod = Scene.v().getMethod(nextMethodSig);
 
             if (nextMethod.method().isConcrete()) {
-                Body body = nextMethod.method().getActiveBody();
+                Body body = nextMethod.method().retrieveActiveBody();
                 for (Unit unit : body.getUnits()) {
                     Stmt stmt = (Stmt) unit;
                     if (stmt.containsInvokeExpr()) {

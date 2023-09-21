@@ -7,8 +7,11 @@ import soot.Scene;
 import soot.jimple.infoflow.InfoflowConfiguration;
 import soot.jimple.infoflow.android.SetupApplication;
 import soot.jimple.infoflow.results.InfoflowResults;
+import soot.jimple.infoflow.sourcesSinks.definitions.ISourceSinkCategory;
+import soot.jimple.infoflow.sourcesSinks.definitions.ISourceSinkDefinitionProvider;
 import soot.jimple.infoflow.taintWrappers.EasyTaintWrapper;
 import soot.jimple.toolkits.callgraph.CallGraph;
+import soot.options.Options;
 
 import java.io.IOException;
 
@@ -32,6 +35,7 @@ public class FlowDroid {
     public void initFlowDroid(String apkName) throws IOException {
         if (application == null) {
             G.reset();
+            Options.v().set_whole_program(true);
             application = new SetupApplication(Config.androidJarPath, Config.apkDirectory + apkName);
             setFlowDroidConfig();
         }
@@ -74,6 +78,8 @@ public class FlowDroid {
         application.getConfig().setSootIntegrationMode(InfoflowConfiguration.SootIntegrationMode.UseExistingCallgraph);
         return application.runInfoflow(sourcesAndSinksFilePath);
     }
+
+
 
 
 
